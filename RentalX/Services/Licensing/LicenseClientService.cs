@@ -2,6 +2,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
+using RentalX.Admin.Services;
 using RentalX.Models.Licensing;
 
 namespace RentalX.Services.Licensing;
@@ -17,7 +18,7 @@ public sealed class LicenseClientService : ILicenseClientService
     private readonly HttpClient _http;
     private readonly IMachineIdService _machineId;
     private readonly string _statePath;
-    private string _baseUrl = "http://localhost:5159";
+    private string _baseUrl = LicenseApiDefaults.BaseUrl;
 
     public LicenseClientService(HttpClient http, IMachineIdService machineId)
     {
@@ -37,7 +38,7 @@ public sealed class LicenseClientService : ILicenseClientService
         set
         {
             var trimmed = (value ?? string.Empty).Trim().TrimEnd('/');
-            _baseUrl = string.IsNullOrWhiteSpace(trimmed) ? "http://localhost:5159" : trimmed;
+            _baseUrl = string.IsNullOrWhiteSpace(trimmed) ? LicenseApiDefaults.BaseUrl : trimmed;
         }
     }
 

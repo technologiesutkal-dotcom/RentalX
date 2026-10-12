@@ -35,7 +35,7 @@ public partial class LoginViewModel : ObservableObject
         _session = session;
         _machine = machine;
         _settings = settings;
-        ApiBaseUrl = "http://localhost:5159";
+        ApiBaseUrl = LicenseApiDefaults.BaseUrl;
         SerialNumber = _machine.GetMachineId();
         DisplaySerial = SerialFormatter.Format(SerialNumber);
         MachineName = _machine.GetMachineName();
@@ -47,7 +47,7 @@ public partial class LoginViewModel : ObservableObject
     public event Action? LoginSucceeded;
 
     [ObservableProperty] private string _companyDisplay = "RentalX Platform";
-    [ObservableProperty] private string _apiBaseUrl = "http://localhost:5159";
+    [ObservableProperty] private string _apiBaseUrl = LicenseApiDefaults.BaseUrl;
     [ObservableProperty] private string _username = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private string _serialNumber = string.Empty;
@@ -221,7 +221,7 @@ public partial class LoginViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(ApiBaseUrl))
         {
-            SetError("API URL is required (local: http://localhost:5159).");
+            SetError($"API URL is required (e.g. {LicenseApiDefaults.BaseUrl}).");
             return;
         }
 

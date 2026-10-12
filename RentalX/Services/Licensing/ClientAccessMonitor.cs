@@ -169,7 +169,7 @@ public sealed class ClientAccessMonitor : IClientAccessMonitor, IDisposable
 
     private Uri BuildUri(string path)
     {
-        var baseUrl = string.IsNullOrWhiteSpace(_api.BaseUrl) ? "http://localhost:5159" : _api.BaseUrl.TrimEnd('/');
+        var baseUrl = string.IsNullOrWhiteSpace(_api.BaseUrl) ? LicenseApiDefaults.BaseUrl : _api.BaseUrl.TrimEnd('/');
         return new Uri($"{baseUrl}/{path.TrimStart('/')}");
     }
 

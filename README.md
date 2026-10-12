@@ -14,4 +14,5 @@ Rental management desktop app (WPF) with Super Admin licensing via `RentalX.Lice
 dotnet run --project RentalX.LicenseApi --launch-profile http
 ```
 
-Default: `http://localhost:5159`
+Default (Railway): `https://rentalx-production.up.railway.app`  
+Local: `http://localhost:5159`

@@ -15,7 +15,7 @@ public sealed class LicenseApiClient : ILicenseApiClient
 
     private readonly HttpClient _http;
     private readonly IAdminSession _session;
-    private string _baseUrl = "http://localhost:5159";
+    private string _baseUrl = LicenseApiDefaults.BaseUrl;
 
     public LicenseApiClient(HttpClient http, IAdminSession session)
     {
@@ -31,7 +31,7 @@ public sealed class LicenseApiClient : ILicenseApiClient
         set
         {
             var trimmed = (value ?? string.Empty).Trim().TrimEnd('/');
-            _baseUrl = string.IsNullOrWhiteSpace(trimmed) ? "http://localhost:5159" : trimmed;
+            _baseUrl = string.IsNullOrWhiteSpace(trimmed) ? LicenseApiDefaults.BaseUrl : trimmed;
         }
     }
 
@@ -245,7 +245,7 @@ public sealed class LicenseApiClient : ILicenseApiClient
         }
         catch (UriFormatException)
         {
-            return (default, "Invalid API URL. Use e.g. http://localhost:5159");
+            return (default, $"Invalid API URL. Use e.g. {LicenseApiDefaults.BaseUrl}");
         }
         catch (Exception ex)
         {

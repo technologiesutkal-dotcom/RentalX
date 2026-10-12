@@ -1,6 +1,7 @@
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RentalX.Admin.Services;
 using RentalX.Services.Licensing;
 
 namespace RentalX.ViewModels;
@@ -11,7 +12,7 @@ public partial class ActivationViewModel : ObservableObject
     private readonly IMachineIdService _machine;
     private readonly Window _window;
 
-    [ObservableProperty] private string _apiBaseUrl = "http://localhost:5159";
+    [ObservableProperty] private string _apiBaseUrl = LicenseApiDefaults.BaseUrl;
     [ObservableProperty] private string _licenseKey = string.Empty;
     [ObservableProperty] private string _machineId = string.Empty;
     [ObservableProperty] private string _machineName = string.Empty;
