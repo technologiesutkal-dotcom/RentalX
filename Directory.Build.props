@@ -1,0 +1,6 @@
+<Project>
+  <!-- WPF markup compile races under parallel MSBuild (CS0103 InitializeComponent). -->
+  <PropertyGroup>
+    <BuildInParallel>false</BuildInParallel>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>RentalX</RootNamespace>
+    <AssemblyName>RentalX</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <!-- Keep WPF markup compile reliable in Visual Studio IntelliSense -->
+    <EnableDefaultApplicationDefinition>true</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="QuestPDF" Version="2024.10.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RentalX.Admin\RentalX.Admin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\logo-light.png" />
+    <Resource Include="Assets\favicon.png" />
+    <Resource Include="Assets\favicon-light.png" />
+    <!-- Avoid double-include with ApplicationIcon: pack URI still needs Resource -->
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+
+</Project>

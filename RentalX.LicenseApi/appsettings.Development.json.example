@@ -1,0 +1,7 @@
+{
+  "Database": {
+    "Provider": "PostgreSQL",
+    "ConnectionString": "Host=YOUR-pooler.neon.tech;Database=neondb;Username=neondb_owner;Password=YOUR_PASSWORD;SSL Mode=Require;Trust Server Certificate=true;Pooling=true",
+    "ConnectionStringDirect": "Host=YOUR-direct.neon.tech;Database=neondb;Username=neondb_owner;Password=YOUR_PASSWORD;SSL Mode=Require;Trust Server Certificate=true"
+  }
+}

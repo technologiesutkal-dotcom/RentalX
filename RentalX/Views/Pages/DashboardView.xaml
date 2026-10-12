@@ -1,0 +1,390 @@
+<UserControl x:Class="RentalX.Views.Pages.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,22,28,28">
+
+            <UniformGrid Columns="5">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0" Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Total Items" Foreground="#64748B" FontSize="12"/>
+                            <TextBlock Text="{Binding TotalItemsText}" FontSize="26" FontWeight="Bold" Foreground="#0F172A" Margin="0,6,0,4"/>
+                            <TextBlock Text="All inventory" Foreground="#059669" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12" Background="{StaticResource BrandSoftGradient}" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#0F766E"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="5,0" Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Available" Foreground="#64748B" FontSize="12"/>
+                            <TextBlock Text="{Binding AvailableItemsText}" FontSize="26" FontWeight="Bold" Foreground="#0F172A" Margin="0,6,0,4"/>
+                            <TextBlock Text="Ready to rent" Foreground="#059669" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12" Background="{StaticResource SuccessSoftGradient}" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#059669"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="5,0" Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Active Rentals" Foreground="#64748B" FontSize="12"/>
+                            <TextBlock Text="{Binding ActiveRentalsText}" FontSize="26" FontWeight="Bold" Foreground="#0F172A" Margin="0,6,0,4"/>
+                            <TextBlock Text="Currently rented" Foreground="#0F766E" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12" Background="{StaticResource BrandSoftGradient}" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE724;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#0F766E"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="5,0" Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Overdue" Foreground="#64748B" FontSize="12"/>
+                            <TextBlock Text="{Binding OverdueCountText}" FontSize="26" FontWeight="Bold" Foreground="#DC2626" Margin="0,6,0,4"/>
+                            <TextBlock Text="Needs attention" Foreground="#DC2626" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12" Background="{StaticResource DangerSoftGradient}" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#DC2626"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Margin="10,0,0,0" Padding="16" CornerRadius="16" Background="{StaticResource HeroGradient}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="22" ShadowDepth="3" Direction="270" Opacity="0.28" Color="#0F766E"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="46"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Today's Revenue" Foreground="#DBEAFE" FontSize="12"/>
+                            <TextBlock Text="{Binding TodaysRevenueText}" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,6,0,4"/>
+                            <TextBlock Text="{Binding RevenueGrowthText}" Foreground="#BBF7D0" FontSize="12" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="44" Height="44" CornerRadius="12" VerticalAlignment="Top">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#66FFFFFF" Offset="0"/>
+                                    <GradientStop Color="#22FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <TextBlock Text="&#xE8C7;" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="White"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </UniformGrid>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,18,0,0" Padding="16,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="6,0,18,0">
+                        <TextBlock Text="Quick Actions" FontWeight="SemiBold" FontSize="15" Foreground="#0F172A"/>
+                        <TextBlock Text="Common operations" FontSize="12" Foreground="#94A3B8" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource QuickButtonStyle}" Margin="0" Command="{Binding GoToBookingsCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource BrandGradient}" Margin="0,0,10,0">
+                                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="New Booking" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Create rental" FontSize="11" Foreground="#94A3B8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource QuickButtonStyle}" Command="{Binding GoToDispatchCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource SuccessGradient}" Margin="0,0,10,0">
+                                    <TextBlock Text="&#xE724;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Dispatch" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Send items" FontSize="11" Foreground="#94A3B8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource QuickButtonStyle}" Command="{Binding GoToReturnsCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource WarningGradient}" Margin="0,0,10,0">
+                                    <TextBlock Text="&#xE7A7;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Receive" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Process return" FontSize="11" Foreground="#94A3B8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource QuickButtonStyle}" Command="{Binding GoToBillingCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource VioletGradient}" Margin="0,0,10,0">
+                                    <TextBlock Text="&#xE8A5;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="White"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="New Invoice" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                    <TextBlock Text="Generate bill" FontSize="11" Foreground="#94A3B8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,18,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="64"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Margin="20,0">
+                            <TextBlock Text="Recent Bookings" Style="{StaticResource SectionTitleStyle}"/>
+                            <Button Content="View all" Style="{StaticResource LinkButtonStyle}" Command="{Binding GoToBookingsCommand}"/>
+                        </Grid>
+                        <DataGrid Grid.Row="1"
+                                  Style="{StaticResource DashboardDataGridStyle}"
+                                  ItemsSource="{Binding RecentBookings}"
+                                  Margin="0,0,0,8"
+                                  MinHeight="234">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Booking" Binding="{Binding BookingNumber}" Width="110"/>
+                                <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
+                                <DataGridTextColumn Header="Items" Binding="{Binding ItemsSummary}" Width="140"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding BookingDateText}" Width="120"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding AmountText}" Width="100"/>
+                                <DataGridTemplateColumn Header="Status" Width="120">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border x:Name="Badge" CornerRadius="10" Padding="8,4" HorizontalAlignment="Left"
+                                                    Background="{StaticResource SuccessSoftGradient}">
+                                                <TextBlock x:Name="Label" Text="{Binding StatusText}" FontSize="11" FontWeight="SemiBold" Foreground="#047857"/>
+                                            </Border>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding StatusText}" Value="Dispatched">
+                                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource BrandSoftGradient}"/>
+                                                    <Setter TargetName="Label" Property="Foreground" Value="#0F766E"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding StatusText}" Value="Pending">
+                                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource WarningSoftGradient}"/>
+                                                    <Setter TargetName="Label" Property="Foreground" Value="#B45309"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding StatusText}" Value="Overdue">
+                                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource DangerSoftGradient}"/>
+                                                    <Setter TargetName="Label" Property="Foreground" Value="#B91C1C"/>
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="64"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Margin="20,0">
+                            <TextBlock Text="Stock Overview" Style="{StaticResource SectionTitleStyle}"/>
+                            <Button Content="Inventory" Style="{StaticResource LinkButtonStyle}" Command="{Binding GoToInventoryCommand}"/>
+                        </Grid>
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding StockItems}" Margin="20,0,20,18">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,0,12">
+                                        <Grid Margin="0,0,0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="64"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                                <TextBlock FontSize="12" Foreground="#94A3B8" Margin="0,2,0,0">
+                                                    <Run Text="Total"/>
+                                                    <Run Text="{Binding TotalQuantity, Mode=OneWay}"/>
+                                                    <Run Text=" · Rented"/>
+                                                    <Run Text="{Binding RentedQuantity, Mode=OneWay}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding AvailableQuantity}"
+                                                       FontSize="20" FontWeight="Bold"
+                                                       Foreground="#059669"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                        <ProgressBar Style="{StaticResource ModernProgressStyle}"
+                                                     Value="{Binding AvailablePercent, Mode=OneWay}"
+                                                     Maximum="100"
+                                                     IsIndeterminate="False"
+                                                     Foreground="{StaticResource SuccessGradient}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <UniformGrid Columns="3" Margin="0,18,0,0">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="Upcoming Returns" Style="{StaticResource SectionTitleStyle}"/>
+                        <TextBlock Text="Next scheduled returns" Foreground="#94A3B8" FontSize="12" Margin="0,4,0,14"/>
+                        <ItemsControl ItemsSource="{Binding UpcomingReturns}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="12" Padding="12" Margin="0,0,0,8" Background="{StaticResource BrandSoftGradient}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource WarningSoftGradient}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding ItemName}" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                                <TextBlock Text="{Binding CustomerName}" FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
+                                            </StackPanel>
+                                            <Border Grid.Column="1" CornerRadius="8" Padding="8,4" VerticalAlignment="Center"
+                                                    Background="{StaticResource BrandGradient}">
+                                                <TextBlock Text="{Binding DueText}" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="5,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="Low Stock" Style="{StaticResource SectionTitleStyle}"/>
+                        <TextBlock Text="Items requiring attention" Foreground="#94A3B8" FontSize="12" Margin="0,4,0,14"/>
+                        <ItemsControl ItemsSource="{Binding LowStockItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="8" Height="8" CornerRadius="4" VerticalAlignment="Center"
+                                                Background="{StaticResource WarningGradient}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCritical}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource DangerGradient}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="SemiBold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" FontWeight="SemiBold" FontSize="13" Foreground="#D97706">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#D97706"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCritical}" Value="True">
+                                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                            <Run Text="{Binding Available, Mode=OneWay}"/>
+                                            <Run Text="available"/>
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0" Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="Payment Summary" Style="{StaticResource SectionTitleStyle}"/>
+                        <TextBlock Text="Today's collection" Foreground="#94A3B8" FontSize="12" Margin="0,4,0,14"/>
+                        <Grid Height="8" Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="4,0,0,4" Background="{StaticResource SuccessGradient}"/>
+                            <Border Grid.Column="1" Margin="3,0,0,0" CornerRadius="0,4,4,0" Background="{StaticResource DangerGradient}"/>
+                        </Grid>
+                        <Grid Margin="0,4">
+                            <TextBlock Text="Collected" Foreground="#64748B"/>
+                            <TextBlock Text="{Binding CollectedText}" FontWeight="Bold" Foreground="#059669" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,12,0,4">
+                            <TextBlock Text="Pending" Foreground="#64748B"/>
+                            <TextBlock Text="{Binding PendingText}" FontWeight="Bold" Foreground="#DC2626" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,12,0,4">
+                            <TextBlock Text="Refunded Today" Foreground="#64748B"/>
+                            <TextBlock Text="{Binding DepositsText}" FontWeight="Bold" Foreground="#D97706" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

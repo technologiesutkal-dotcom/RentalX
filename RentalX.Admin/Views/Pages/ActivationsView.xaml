@@ -1,0 +1,54 @@
+<UserControl x:Class="RentalX.Admin.Views.Pages.ActivationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource SectionCard}" Margin="0,0,0,14">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <DockPanel Margin="0,0,0,12">
+                    <Button DockPanel.Dock="Right" Content="Refresh" Style="{StaticResource GhostButton}" Margin="8,0,0,0" Command="{Binding LoadCommand}"/>
+                    <CheckBox DockPanel.Dock="Right" Content="Active only" IsChecked="{Binding ActiveOnly}"
+                              VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+                </DockPanel>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding Activations}" SelectedItem="{Binding SelectedActivation}"
+                          AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" BorderThickness="0" RowHeight="40">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Client" Binding="{Binding ClientName}" Width="*"/>
+                        <DataGridTextColumn Header="License" Binding="{Binding LicenseKey}" Width="150"/>
+                        <DataGridTextColumn Header="Machine" Binding="{Binding MachineName}" Width="140"/>
+                        <DataGridTextColumn Header="Machine ID" Binding="{Binding MachineId}" Width="180"/>
+                        <DataGridTextColumn Header="Activated" Binding="{Binding ActivatedAt, StringFormat=dd MMM yyyy HH:mm}" Width="140"/>
+                        <DataGridTextColumn Header="Last seen" Binding="{Binding LastSeenAt, StringFormat=dd MMM yyyy HH:mm}" Width="140"/>
+                        <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Style="{StaticResource SectionCard}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <TextBox Style="{StaticResource FieldBox}" Width="260" Margin="0,0,8,0"
+                             Text="{Binding DeactivateReason, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Optional deactivate reason"/>
+                    <Button Content="Deactivate machine" Style="{StaticResource DangerButton}" Command="{Binding DeactivateCommand}"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Machine activations" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding SuccessMessage}" Foreground="#0F766E" TextWrapping="Wrap"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

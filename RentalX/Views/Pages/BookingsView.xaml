@@ -1,0 +1,234 @@
+<UserControl x:Class="RentalX.Views.Pages.BookingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="28">
+
+            <Border Background="#ECFDF5" CornerRadius="12" Padding="14" Margin="0,0,0,14">
+                <TextBlock Text="{Binding WorkflowHint}" TextWrapping="Wrap" Foreground="#1E3A8A" FontSize="13"/>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Padding="18" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="New Booking — add multiple items for one customer" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,12"/>
+
+                    <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,8">
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Customer *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding Customers}"
+                                      SelectedItem="{Binding SelectedCustomer}"
+                                      DisplayMemberPath="Name"
+                                      Height="36" VerticalContentAlignment="Center"/>
+                            <TextBlock Text="{Binding CustomerError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Item" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <ComboBox ItemsSource="{Binding InventoryItems}"
+                                      SelectedItem="{Binding SelectedInventoryItem}"
+                                      DisplayMemberPath="Name"
+                                      Height="36" VerticalContentAlignment="Center"/>
+                            <TextBlock Text="{Binding ItemError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                            <TextBlock Text="{Binding RateHint}" Foreground="#64748B" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Quantity" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding QuantityText, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                                <Button Grid.Column="1" Content="+ Add item" Style="{StaticResource PrimaryButtonStyle}"
+                                        Command="{Binding AddItemToCartCommand}" Margin="8,0,0,0" Padding="12,0"
+                                        ToolTip="Add this item to the booking cart"/>
+                            </Grid>
+                            <TextBlock Text="{Binding QuantityError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,8">
+                            <TextBlock Text="Rental Days *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding RentalDaysText, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                            <TextBlock Text="{Binding DaysError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <Border Grid.Row="2" Margin="0,0,0,10" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="10" Padding="12">
+                        <StackPanel>
+                            <DockPanel Margin="0,0,0,8">
+                                <TextBlock Text="Items in this booking" FontWeight="SemiBold" Foreground="#0F172A"/>
+                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding CartCountText}" Foreground="#64748B" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                    <Button Content="Clear items" Style="{StaticResource QuickButtonStyle}" Command="{Binding ClearCartCommand}"/>
+                                </StackPanel>
+                            </DockPanel>
+                            <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal" BorderThickness="0"
+                                      MinHeight="60" MaxHeight="160" RowHeight="34">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Item" Binding="{Binding ItemName}" Width="*"/>
+                                    <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="50"/>
+                                    <DataGridTextColumn Header="Rate/day" Binding="{Binding DailyRate, StringFormat=₹{0:N0}}" Width="80"/>
+                                    <DataGridTextColumn Header="Line total" Binding="{Binding AmountText}" Width="90"/>
+                                    <DataGridTemplateColumn Header="" Width="70">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="Remove" Padding="6,2" Command="{Binding DataContext.RemoveCartItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <UniformGrid Grid.Row="3" Columns="4" Margin="0,0,0,8">
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Booking Date *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding BookingDate}" Height="36">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Return Date *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <DatePicker SelectedDate="{Binding ReturnDate}" Height="36">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="IsReadOnly" Value="True"/>
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                            <TextBlock Text="{Binding DateError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,8,8">
+                            <TextBlock Text="Total rental amount" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <TextBox Text="{Binding AmountText}" IsReadOnly="True" Height="36" Padding="8,6" Background="#F8FAFC"/>
+                            <TextBlock Text="Sum of all items × days" Foreground="#64748B" FontSize="11" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,8">
+                            <TextBlock Text="Advance received now (₹)" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding AdvanceText, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                                <Button Grid.Column="1" Content="Full" ToolTip="Take full amount as advance"
+                                        Style="{StaticResource QuickButtonStyle}" Command="{Binding PayFullAsAdvanceCommand}"
+                                        Margin="8,0,0,0" Padding="10,0"/>
+                            </Grid>
+                            <TextBlock Text="{Binding AdvanceError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                            <TextBlock Text="{Binding BalancePreview}" Foreground="#1E3A8A" FontSize="11" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <Button Grid.Row="4" Content="Create Booking" Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding CreateBookingCommand}" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+
+                    <Border Grid.Row="5" Background="#F8FAFC" CornerRadius="10" Padding="12" Margin="0,4,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="0,0,8,0">
+                                <TextBlock Text="Quick add customer name" Foreground="#64748B" FontSize="11"/>
+                                <TextBox Text="{Binding NewCustomerName, UpdateSourceTrigger=PropertyChanged}" Height="34" Padding="8,6" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                <TextBlock Text="Customer phone" Foreground="#64748B" FontSize="11"/>
+                                <TextBox Text="{Binding NewCustomerPhone, UpdateSourceTrigger=PropertyChanged}" Height="34" Padding="8,6" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <Button Grid.Column="2" Content="Add Customer" Style="{StaticResource QuickButtonStyle}"
+                                    Command="{Binding AddCustomerQuickCommand}" Margin="0,16,8,0"/>
+                            <TextBlock Grid.Column="3" Text="{Binding FormMessage}" Foreground="{Binding FormMessageBrush}"
+                                       FontWeight="SemiBold" VerticalAlignment="Bottom" TextWrapping="Wrap"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="20,16,20,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="All Bookings" Style="{StaticResource SectionTitleStyle}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                        <TextBox Grid.Column="1" Height="34" Padding="8,6" Margin="0,0,8,0"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Search booking, customer, item, status..."/>
+                        <Button Grid.Column="2" Content="Clear" Style="{StaticResource QuickButtonStyle}"
+                                Command="{Binding ClearSearchCommand}" Margin="0,0,12,0"/>
+                        <TextBlock Grid.Column="3" Text="{Binding ResultCountText}" Style="{StaticResource SecondaryTextStyle}" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <DataGrid Grid.Row="1"
+                              Style="{StaticResource DashboardDataGridStyle}"
+                              ItemsSource="{Binding Bookings}"
+                              SelectedItem="{Binding SelectedBooking}"
+                              MinHeight="220"
+                              Margin="0,0,0,8">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Booking" Binding="{Binding BookingNumber}" Width="100"/>
+                            <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
+                            <DataGridTextColumn Header="Items" Binding="{Binding ItemsSummary}" Width="140"/>
+                            <DataGridTextColumn Header="Total" Binding="{Binding AmountText}" Width="90"/>
+                            <DataGridTextColumn Header="Paid" Binding="{Binding PaidText}" Width="90"/>
+                            <DataGridTextColumn Header="Balance" Binding="{Binding BalanceText}" Width="90"/>
+                            <DataGridTextColumn Header="Money" Binding="{Binding PaymentStatusText}" Width="110"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding StatusText}" Width="160"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Border Grid.Row="2" Background="{StaticResource BrandSoftGradient}" Padding="16,10" CornerRadius="0,0,16,16">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedBooking}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock FontSize="13" Foreground="#1E3A8A" TextWrapping="Wrap">
+                            <Run Text="Selected:"/>
+                            <Run Text="{Binding SelectedBooking.BookingNumber, Mode=OneWay}" FontWeight="SemiBold"/>
+                            <Run Text=" · Total "/>
+                            <Run Text="{Binding SelectedBooking.AmountText, Mode=OneWay}"/>
+                            <Run Text=" · Paid "/>
+                            <Run Text="{Binding SelectedBooking.PaidText, Mode=OneWay}"/>
+                            <Run Text=" · Balance "/>
+                            <Run Text="{Binding SelectedBooking.BalanceText, Mode=OneWay}" FontWeight="SemiBold"/>
+                            <Run Text=" · "/>
+                            <Run Text="{Binding SelectedBooking.StatusText, Mode=OneWay}"/>
+                        </TextBlock>
+                    </Border>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

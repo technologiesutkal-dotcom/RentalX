@@ -1,0 +1,122 @@
+<UserControl x:Class="RentalX.Views.Pages.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:RentalX.Helpers">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border Style="{StaticResource CardStyle}" Margin="28" Padding="28" MaxWidth="900" HorizontalAlignment="Left">
+            <StackPanel>
+                <TextBlock Text="Business settings" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,6"/>
+                <TextBlock Text="Used on invoices, reports, and marketing PDFs. Works for any rental business — tents, equipment, vehicles, costumes, cameras, and more."
+                           Style="{StaticResource SecondaryTextStyle}" Margin="0,0,0,18" TextWrapping="Wrap"/>
+
+                <UniformGrid Columns="2">
+                    <StackPanel Margin="0,0,12,12">
+                        <TextBlock Text="Business type *" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding BusinessTypes}" SelectedItem="{Binding BusinessType}"
+                                  Height="36" VerticalContentAlignment="Center" Padding="8,6"/>
+                    </StackPanel>
+                    <StackPanel Margin="12,0,0,12">
+                        <TextBlock Text="Company / shop name *" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                        <TextBlock Text="{Binding CompanyError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,12,12">
+                        <TextBlock Text="Owner name *" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding OwnerName, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                        <TextBlock Text="{Binding OwnerError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="12,0,0,12">
+                        <TextBlock Text="Phone *" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                        <TextBlock Text="{Binding PhoneError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,12,12">
+                        <TextBlock Text="Address" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                    </StackPanel>
+                    <StackPanel Margin="12,0,0,12">
+                        <TextBlock Text="City" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,12,12">
+                        <TextBlock Text="Email (optional)" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                        <TextBlock Text="{Binding EmailError}" Foreground="#DC2626" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <StackPanel Margin="12,0,0,12">
+                        <TextBlock Text="GST number" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding GstNumber, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                        <CheckBox Content="Show GST on invoices / reports" IsChecked="{Binding ShowGstOnReports}"
+                                  Margin="0,8,0,0" Foreground="#475569"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,12,12">
+                        <TextBlock Text="Currency" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding Currency, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                    </StackPanel>
+                    <StackPanel Margin="12,0,0,12">
+                        <TextBlock Text="Report / invoice footer" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <TextBox Text="{Binding ReportFooter, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                    </StackPanel>
+                </UniformGrid>
+
+                <CheckBox Content="Enable notifications" IsChecked="{Binding EnableNotifications}" Margin="0,8,0,10"/>
+                <CheckBox Content="Auto backup database" IsChecked="{Binding AutoBackup}" Margin="0,0,0,16"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <Button Content="Save Settings" Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding SaveCommand}" Margin="0,0,10,0"/>
+                    <Button Content="Generate Marketing PDF" Style="{StaticResource QuickButtonStyle}"
+                            Command="{Binding GenerateMarketingPdfCommand}"
+                            ToolTip="Product guide tailored to your business type"
+                            Margin="0,0,10,0"/>
+                    <Button Content="Website Delivery Guide PDF" Style="{StaticResource QuickButtonStyle}"
+                            Command="{Binding GenerateDeliveryGuidePdfCommand}"
+                            ToolTip="End-to-end: website download, payment, setup, machine license"/>
+                </StackPanel>
+                <TextBlock Text="Marketing PDF uses your business type and company details. Saved under Documents/RentalX/Marketing."
+                           Style="{StaticResource SecondaryTextStyle}" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding FormMessage}" Foreground="{Binding FormMessageBrush}"
+                           FontWeight="SemiBold" Margin="0,12,0,0"/>
+
+                <Border Background="#F8FAFC" CornerRadius="12" Padding="18" Margin="0,28,0,0"
+                        BorderBrush="#E2E8F0" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Local app login (this PC)" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,6"/>
+                        <TextBlock Text="{Binding CurrentLoginId, StringFormat=Current login ID: {0}}"
+                                   Style="{StaticResource SecondaryTextStyle}" Margin="0,0,0,14"/>
+
+                        <UniformGrid Columns="2">
+                            <StackPanel Margin="0,0,12,12">
+                                <TextBlock Text="New Login ID *" Foreground="#64748B" Margin="0,0,0,6"/>
+                                <TextBox Text="{Binding LoginId, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
+                            </StackPanel>
+                            <StackPanel Margin="12,0,0,12">
+                                <TextBlock Text="Current Password *" Foreground="#64748B" Margin="0,0,0,6"/>
+                                <PasswordBox Height="36" Padding="8,6"
+                                             helpers:PasswordBoxHelper.BindPassword="True"
+                                             helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,12,12">
+                                <TextBlock Text="New Password *" Foreground="#64748B" Margin="0,0,0,6"/>
+                                <PasswordBox Height="36" Padding="8,6"
+                                             helpers:PasswordBoxHelper.BindPassword="True"
+                                             helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Margin="12,0,0,12">
+                                <TextBlock Text="Confirm New Password *" Foreground="#64748B" Margin="0,0,0,6"/>
+                                <PasswordBox Height="36" Padding="8,6"
+                                             helpers:PasswordBoxHelper.BindPassword="True"
+                                             helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <Button Content="Update Login Credentials" Style="{StaticResource PrimaryButtonStyle}"
+                                Command="{Binding ChangeLoginCommand}" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding LoginMessage}" Foreground="{Binding LoginMessageBrush}"
+                                   FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

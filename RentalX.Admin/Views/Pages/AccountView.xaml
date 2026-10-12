@@ -1,0 +1,120 @@
+<UserControl x:Class="RentalX.Admin.Views.Pages.AccountView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:helpers="clr-namespace:RentalX.Admin.Helpers">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="0,0,8,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Style="{StaticResource SectionCard}" Padding="22" MaxWidth="640" HorizontalAlignment="Left">
+                <StackPanel>
+                    <TextBlock Text="Super Admin account" FontSize="18" FontWeight="Bold" Foreground="#0F172A"/>
+                    <TextBlock Text="Change your login username and password. Same credentials work on every laptop you authorize below."
+                               Foreground="#64748B" FontSize="12" TextWrapping="Wrap" Margin="0,6,0,18"/>
+
+                    <TextBlock Text="Current username" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding CurrentUsername}" IsReadOnly="True" Height="36" Padding="8,6"
+                             Background="#F8FAFC" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="New username *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                    <TextBox Text="{Binding NewUsername, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6" Margin="0,0,0,12"/>
+
+                    <TextBlock Text="Current password *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                    <Grid Margin="0,0,0,12">
+                        <PasswordBox Height="36" Padding="8,6"
+                                     helpers:PasswordBoxHelper.BindPassword="True"
+                                     helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding ShowPasswords, Converter={StaticResource InverseBoolToVis}}"/>
+                        <TextBox Text="{Binding CurrentPassword, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"
+                                 Visibility="{Binding ShowPasswords, Converter={StaticResource BoolToVis}}"/>
+                    </Grid>
+
+                    <TextBlock Text="New password *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                    <Grid Margin="0,0,0,12">
+                        <PasswordBox Height="36" Padding="8,6"
+                                     helpers:PasswordBoxHelper.BindPassword="True"
+                                     helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding ShowPasswords, Converter={StaticResource InverseBoolToVis}}"/>
+                        <TextBox Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"
+                                 Visibility="{Binding ShowPasswords, Converter={StaticResource BoolToVis}}"/>
+                    </Grid>
+
+                    <TextBlock Text="Confirm new password *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                    <Grid Margin="0,0,0,12">
+                        <PasswordBox Height="36" Padding="8,6"
+                                     helpers:PasswordBoxHelper.BindPassword="True"
+                                     helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding ShowPasswords, Converter={StaticResource InverseBoolToVis}}"/>
+                        <TextBox Text="{Binding ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"
+                                 Visibility="{Binding ShowPasswords, Converter={StaticResource BoolToVis}}"/>
+                    </Grid>
+
+                    <CheckBox Content="Show passwords" IsChecked="{Binding ShowPasswords}" Margin="0,0,0,14"/>
+
+                    <Button Content="Save username &amp; password" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding SaveCommand}" HorizontalAlignment="Left"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}"/>
+                    <TextBlock Text="{Binding Message}" Foreground="{Binding MessageBrush}" FontWeight="SemiBold"
+                               Margin="0,12,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Super Admin multi-laptop serials — full width so table text is readable -->
+            <Border Grid.Row="1" Style="{StaticResource SectionCard}" Padding="22" Margin="0,14,0,0"
+                    BorderBrush="#0F766E" BorderThickness="2" HorizontalAlignment="Stretch">
+                <DockPanel LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Text="Super Admin laptops (serial numbers)" FontSize="18" FontWeight="Bold" Foreground="#0F766E"/>
+                        <TextBlock Margin="0,6,0,14" Foreground="#475569" FontSize="12.5" TextWrapping="Wrap" LineHeight="18"
+                                   Text="Same Super Admin username &amp; password on every authorized PC.&#10;1) On the other laptop open RentalX login → Copy serial (copies the real machine id)&#10;2) Paste it here → Add laptop&#10;3) That person signs in with your Super Admin ID/password&#10;Tip: Remove any old RX-RX… wrong rows first, then add again."/>
+
+                        <TextBlock Text="Paste laptop serial *" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                        <TextBox Style="{StaticResource FieldBox}" Text="{Binding NewAdminSerial, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="From that PC login screen → Copy serial" Margin="0,0,0,8"/>
+
+                        <UniformGrid Columns="2" Margin="0,0,0,8">
+                            <StackPanel Margin="0,0,8,0">
+                                <TextBlock Text="Machine name (optional)" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                                <TextBox Style="{StaticResource FieldBox}" Text="{Binding NewAdminMachine, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Margin="8,0,0,0">
+                                <TextBlock Text="Note (optional)" Foreground="#64748B" FontSize="12" Margin="0,0,0,4"/>
+                                <TextBox Style="{StaticResource FieldBox}" Text="{Binding NewAdminNotes, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </UniformGrid>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                            <Button Content="Add laptop" Style="{StaticResource PrimaryButton}"
+                                    Command="{Binding AddAdminSerialCommand}" Margin="0,0,8,0"/>
+                            <Button Content="Refresh list" Style="{StaticResource GhostButton}"
+                                    Command="{Binding LoadAdminSerialsCommand}" Margin="0,0,8,0"/>
+                            <Button Content="Remove selected" Style="{StaticResource DangerButton}"
+                                    Command="{Binding RemoveAdminSerialCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <TextBlock DockPanel.Dock="Bottom" Text="{Binding SerialMessage}" Foreground="{Binding SerialMessageBrush}"
+                               FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap"/>
+
+                    <DataGrid ItemsSource="{Binding AdminSerials}" SelectedItem="{Binding SelectedAdminSerial}"
+                              AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal" BorderThickness="0"
+                              MinHeight="160" MaxHeight="320" RowHeight="40"
+                              HorizontalAlignment="Stretch" ColumnWidth="*"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.CanContentScroll="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Serial" Binding="{Binding DisplaySerial}" Width="2*"/>
+                            <DataGridTextColumn Header="PC name" Binding="{Binding MachineName}" Width="*"/>
+                            <DataGridTextColumn Header="Note" Binding="{Binding Notes}" Width="2*"/>
+                            <DataGridTextColumn Header="Last login" Binding="{Binding LastLoginAt, StringFormat=dd MMM yyyy HH:mm}" Width="150"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

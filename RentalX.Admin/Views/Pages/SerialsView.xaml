@@ -1,0 +1,80 @@
+<UserControl x:Class="RentalX.Admin.Views.Pages.SerialsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" MinHeight="220"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Style="{StaticResource SectionCard}" Margin="0,0,0,12" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="How client access works" FontSize="15" FontWeight="Bold" Foreground="#0F172A"/>
+                    <TextBlock Margin="0,8,0,0" Foreground="#475569" FontSize="12.5" LineHeight="20" TextWrapping="Wrap"
+                               Text="1) Client Apply once per laptop → Pending&#10;2) Select request → Approve / Re-activate → Login ID (55041+) + Password (RxShop@2026)&#10;3) Client can login only on that approved serial&#10;4) Deactivate blocks login until you Re-activate&#10;5) Super Admin multi-laptop: Account → Super Admin laptops"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" Style="{StaticResource SectionCard}" Margin="0,0,0,12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" MinHeight="180"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Margin="0,0,0,12">
+                        <Button DockPanel.Dock="Right" Content="Refresh" Style="{StaticResource GhostButton}" Command="{Binding LoadCommand}" Margin="8,0,0,0"/>
+                        <ComboBox DockPanel.Dock="Right" Width="130" Margin="0,0,8,0" Style="{StaticResource FieldCombo}"
+                                  ItemsSource="{Binding StatusFilters}" SelectedItem="{Binding StatusFilter}"/>
+                        <TextBox Style="{StaticResource FieldBox}" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Search company, email, serial"/>
+                    </DockPanel>
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Serials}" SelectedItem="{Binding SelectedSerial}"
+                              AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" BorderThickness="0" RowHeight="42"
+                              MaxHeight="360">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Company" Binding="{Binding CompanyName}" Width="*"/>
+                            <DataGridTextColumn Header="Contact / Email" Binding="{Binding Email}" Width="160"/>
+                            <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" Width="110"/>
+                            <DataGridTextColumn Header="PC" Binding="{Binding MachineName}" Width="110"/>
+                            <DataGridTextColumn Header="Serial" Binding="{Binding DisplaySerial}" Width="160"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90"/>
+                            <DataGridTextColumn Header="Applied" Binding="{Binding AppliedAt, StringFormat=dd MMM yyyy}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <TextBlock Text="Selected request" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                    <TextBlock Text="{Binding SelectedSummary}" Foreground="#334155" FontSize="12.5"
+                               TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,12"/>
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                    <TextBlock Text="{Binding SuccessMessage}" Foreground="#0F766E" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Plan for this client (one license only)" FontSize="11" Foreground="#64748B" Margin="0,0,0,4"/>
+                    <ComboBox Style="{StaticResource FieldCombo}" Width="180" HorizontalAlignment="Left"
+                              ItemsSource="{Binding PlanOptions}" SelectedItem="{Binding ApprovePlan}" Margin="0,0,0,10"/>
+
+                    <TextBlock Text="Optional note" FontSize="11" Foreground="#64748B" Margin="0,0,0,4"/>
+                    <TextBox Style="{StaticResource FieldBox}" Text="{Binding ReviewNotes, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,14"/>
+
+                    <Button Content="Approve / Re-activate" Style="{StaticResource PrimaryButton}"
+                            Command="{Binding QuickApproveCommand}"
+                            FontSize="14" Padding="18,12" HorizontalAlignment="Left" Margin="0,0,0,10"
+                            ToolTip="Approve Pending, or Re-activate Deactivated — resets password to RxShop@2026"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Reject" Style="{StaticResource DangerButton}" Command="{Binding RejectCommand}" Margin="0,0,8,0"/>
+                        <Button Content="Deactivate" Style="{StaticResource DangerButton}" Command="{Binding RevokeCommand}" Margin="0,0,8,0"
+                                ToolTip="Set status Deactivated and block client login"/>
+                        <Button Content="Copy serial" Style="{StaticResource GhostButton}" Command="{Binding CopySerialCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

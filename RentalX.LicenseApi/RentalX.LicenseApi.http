@@ -1,0 +1,6 @@
+@RentalX.LicenseApi_HostAddress = http://localhost:5159
+
+GET {{RentalX.LicenseApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

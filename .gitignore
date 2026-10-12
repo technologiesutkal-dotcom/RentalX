@@ -1,0 +1,15 @@
+## Secrets / local config
+**/appsettings.Development.json
+**/appsettings.*.local.json
+.env
+.env.*
+
+## Build
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+
+## Local API run copy (not source)
+RentalX.LicenseApi/run/

@@ -1,0 +1,102 @@
+<UserControl x:Class="RentalX.Admin.Views.Pages.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,14">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="Full cleanup" Style="{StaticResource DangerButton}" Margin="0,0,8,0"
+                        Command="{Binding FactoryResetCommand}"
+                        ToolTip="Delete all clients, licenses, requests — keep only Super Admin"/>
+                <Button Content="Refresh" Style="{StaticResource PrimaryButton}" Command="{Binding LoadCommand}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="#DC2626" VerticalAlignment="Center" TextWrapping="Wrap"/>
+        </DockPanel>
+
+        <!-- Super Admin credentials always visible -->
+        <Border Grid.Row="1" Style="{StaticResource SectionCard}" Margin="0,0,0,14" Padding="18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Super Admin login" FontSize="15" FontWeight="Bold" Foreground="#0F172A"/>
+                    <TextBlock Margin="0,8,0,0" FontSize="13" Foreground="#334155" TextWrapping="Wrap"
+                               Text="Change username &amp; password anytime from the Account menu. Default seed: superadmin / SuperAdmin@123"/>
+                    <TextBlock Margin="0,8,0,0" Foreground="#64748B" FontSize="12" TextWrapping="Wrap"
+                               Text="Client flow: Apply → you Approve serial → Login ID starts at 55041, password RxShop@2026. Client can login only on that approved PC."/>
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="Menu → Account" VerticalAlignment="Center"
+                           Foreground="#0F766E" FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+
+        <UniformGrid Grid.Row="2" Rows="2" Columns="4">
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock Text="Total clients" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding TotalClients}" FontSize="34" FontWeight="Bold" Foreground="#0F172A" Margin="0,8,0,0"/>
+                    <TextBlock Text="{Binding ActiveClients, StringFormat={}{0} active}" Foreground="#0F766E" FontSize="12" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock Text="Pending requests" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding PendingSerials}" FontSize="34" FontWeight="Bold" Foreground="#B45309" Margin="0,8,0,0"/>
+                    <TextBlock Text="Open Requests to approve" Foreground="#D97706" FontSize="12" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock Text="Active licenses" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding ActiveLicenses}" FontSize="34" FontWeight="Bold" Foreground="#0F172A" Margin="0,8,0,0"/>
+                    <TextBlock Text="One license per client" Foreground="#64748B" FontSize="12" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Expiring soon" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding ExpiringSoon}" FontSize="34" FontWeight="Bold" Foreground="#B45309" Margin="0,8,0,0"/>
+                    <TextBlock Text="Licenses within 30 days" Foreground="#64748B" FontSize="12" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,0">
+                <StackPanel>
+                    <TextBlock Text="Revenue this month" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding RevenueThisMonth, StringFormat=₹{0:N0}}" FontSize="30" FontWeight="Bold" Foreground="#0F766E" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,0">
+                <StackPanel>
+                    <TextBlock Text="Total revenue" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding RevenueTotal, StringFormat=₹{0:N0}}" FontSize="30" FontWeight="Bold" Foreground="#0F172A" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}" Margin="0,0,12,0">
+                <StackPanel>
+                    <TextBlock Text="Pending payments" Foreground="#64748B" FontSize="12"/>
+                    <TextBlock Text="{Binding PendingPayments}" FontSize="30" FontWeight="Bold" Foreground="#0F172A" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource StatCard}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#0F766E" Offset="0"/>
+                        <GradientStop Color="#134E4A" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Flow" Foreground="#99F6E4" FontSize="12"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="White" FontSize="13" Margin="0,8,0,0" LineHeight="20"
+                               Text="Apply → Approve (pick plan) → give Username/Password → Deactivate anytime to block login."/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+    </Grid>
+</UserControl>
