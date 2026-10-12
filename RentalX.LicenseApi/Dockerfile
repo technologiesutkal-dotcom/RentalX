@@ -15,9 +15,11 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
+# Must match Railway "Generate Domain" port (8080). Do not use a different $PORT.
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
+ENV ASPNETCORE_HTTP_PORTS=8080
 ENV PORT=8080
 EXPOSE 8080
 
-# Prefer Railway PORT when set; otherwise 8080 (matches Generate Domain port).
-CMD ["sh", "-c", "export ASPNETCORE_URLS=http://0.0.0.0:${PORT:-8080}; echo Listening on $ASPNETCORE_URLS; exec dotnet RentalX.LicenseApi.dll"]
+CMD ["dotnet", "RentalX.LicenseApi.dll"]
+

@@ -31,15 +31,22 @@ builder.Services.AddDbContext<LicenseDbContext>(options =>
         return;
     }
 
-    if (string.IsNullOrWhiteSpace(pgConnectionRaw))
+    // Never throw here — a throw during DbContext setup can take the host down on Railway (502).
+    var raw = pgConnectionRaw;
+    if (string.IsNullOrWhiteSpace(raw))
     {
-        throw new InvalidOperationException(
-            "PostgreSQL connection string missing. Set Database__ConnectionString on Railway " +
-            "(keyword Host=... form or postgresql:// URI), or RENTALX_LICENSE_DB / DATABASE_URL.");
+        raw = "Host=127.0.0.1;Database=missing;Username=x;Password=x";
     }
 
-    // Neon/Railway URI → Npgsql keyword string.
-    var pgConnection = PostgresConnectionString.Normalize(pgConnectionRaw);
+    string pgConnection;
+    try
+    {
+        pgConnection = PostgresConnectionString.Normalize(raw);
+    }
+    catch
+    {
+        pgConnection = "Host=127.0.0.1;Database=invalid;Username=x;Password=x";
+    }
 
     // Neon pooler endpoint — use for the running API.
     options.UseNpgsql(pgConnection, npgsql =>
@@ -570,20 +577,15 @@ app.MapPut("/api/payments/{id:int}", async (int id, PaymentUpsertRequest request
     return err is not null ? Results.BadRequest(new { message = err }) : Results.Ok(dto);
 }).WithTags("Payments");
 
-app.MapGet("/", async (LicenseDbContext db) =>
+// Instant — no DB. Used by Railway healthcheck (Neon idle must not cause 502).
+app.MapGet("/health", () => Results.Ok(new { status = "ok", service = "RentalX.LicenseApi" }));
+
+app.MapGet("/", () => Results.Ok(new
 {
-    var canConnect = await db.Database.CanConnectAsync();
-    var provider = db.Database.ProviderName ?? "unknown";
-    var adminCount = canConnect ? await db.AdminUsers.CountAsync() : -1;
-    return Results.Ok(new
-    {
-        name = "RentalX License API",
-        status = canConnect ? "running" : "db-unreachable",
-        databaseProvider = provider,
-        neonConnected = canConnect,
-        adminUsers = adminCount
-    });
-});
+    name = "RentalX License API",
+    status = "running",
+    hint = "Use /api/health/db to check Neon, /swagger for docs"
+}));
 
 app.MapGet("/api/health/db", async (LicenseDbContext db, IConfiguration config) =>
 {

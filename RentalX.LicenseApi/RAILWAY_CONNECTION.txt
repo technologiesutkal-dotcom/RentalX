@@ -1,0 +1,13 @@
+Paste this EXACT value into Railway → Variables → Database__ConnectionString
+(replace YOUR_PASSWORD with the password from Neon → Connect):
+
+Host=ep-restless-silence-azzafexy-pooler.c-3.ap-southeast-1.aws.neon.tech;Database=neondb;Username=neondb_owner;Password=YOUR_PASSWORD;SSL Mode=Require;Trust Server Certificate=true;Pooling=true
+
+Do NOT use the postgresql:// URI if login still fails.
+Also set:
+  Database__Provider = PostgreSQL
+  ASPNETCORE_ENVIRONMENT = Production
+
+Public domain port must be 8080.
+After saving variables: Deployments → Redeploy.
+Test: https://rentalx-production.up.railway.app/health
