@@ -65,7 +65,8 @@ public static class PostgresConnectionString
         sb.Append("Database=").Append(database).Append(';');
         sb.Append("Username=").Append(username).Append(';');
         sb.Append("Password=").Append(password).Append(';');
-        sb.Append("SSL Mode=Require;Trust Server Certificate=true;Pooling=true");
+        // Neon pooler: require SSL; skip channel binding (URI channel_binding=require breaks some clients).
+        sb.Append("SSL Mode=Require;Trust Server Certificate=true;Pooling=true;Timeout=60");
         return sb.ToString();
     }
 }

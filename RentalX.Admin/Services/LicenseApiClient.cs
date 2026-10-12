@@ -214,6 +214,17 @@ public sealed class LicenseApiClient : ILicenseApiClient
                     : "Invalid login ID or password.");
             }
 
+            if (response.StatusCode is System.Net.HttpStatusCode.BadGateway
+                or System.Net.HttpStatusCode.ServiceUnavailable
+                or System.Net.HttpStatusCode.GatewayTimeout
+                || text.Contains("Application failed to respond", StringComparison.OrdinalIgnoreCase)
+                || text.Contains("Bad Gateway", StringComparison.OrdinalIgnoreCase))
+            {
+                return (default,
+                    "License API is not running on Railway (502). Open Railway → Deployments → View logs. " +
+                    "Fix Database__ConnectionString (Neon Host=... format), then Redeploy.");
+            }
+
             try
             {
                 var err = JsonSerializer.Deserialize<ApiError>(text, JsonOptions);

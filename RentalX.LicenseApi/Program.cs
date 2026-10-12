@@ -63,25 +63,60 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<LicenseDbContext>();
-    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("Startup");
-    logger.LogInformation("License DB provider: {Provider}", dbProvider);
-    await DbSeeder.SeedAsync(db);
-    logger.LogInformation("License database ready (Neon PostgreSQL / configured provider).");
-}
+// Swagger always on hosted API (helps verify Railway is up).
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseCors();
+
+// Listen immediately so Railway does not return 502 "Application failed to respond".
+// Seed Neon in the background with retries.
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    _ = Task.Run(async () =>
+    {
+        var logger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger("Startup");
+        logger.LogInformation("License DB provider: {Provider}", dbProvider);
+        if (!string.Equals(dbProvider, "Sqlite", StringComparison.OrdinalIgnoreCase) &&
+            !string.IsNullOrWhiteSpace(pgConnectionRaw))
+        {
+            try
+            {
+                var normalized = PostgresConnectionString.Normalize(pgConnectionRaw);
+                var hostOnly = normalized.Split(';')
+                    .FirstOrDefault(p => p.StartsWith("Host=", StringComparison.OrdinalIgnoreCase));
+                logger.LogInformation("DB connection {HostPart} (password hidden)", hostOnly ?? "Host=?");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Invalid Database__ConnectionString format");
+            }
+        }
+
+        for (var attempt = 1; attempt <= 10; attempt++)
+        {
+            try
+            {
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<LicenseDbContext>();
+                await DbSeeder.SeedAsync(db);
+                logger.LogInformation("License database ready (Neon PostgreSQL / configured provider).");
+                return;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Database seed failed (attempt {Attempt}/10). Retrying...", attempt);
+                await Task.Delay(TimeSpan.FromSeconds(3));
+            }
+        }
+
+        logger.LogError(
+            "Database still unavailable. Fix Railway variable Database__ConnectionString " +
+            "(Neon dashboard → Connection string → .NET / Host=... form).");
+    });
+});
 
 // ---------- Public license endpoints (client app) ----------
 app.MapPost("/api/license/activate", async (ActivateRequest request, ILicenseOpsService ops) =>
