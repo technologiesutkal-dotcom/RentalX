@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using RentalX.LicenseApi.Data;
 using RentalX.LicenseApi.Dtos;
+using RentalX.LicenseApi.Helpers;
 using RentalX.LicenseApi.Services;
 
 // Neon/Npgsql: prefer UTC timestamps (we also normalize dates in services).
@@ -11,9 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Neon PostgreSQL (pooled) by default. Set Database:Provider=Sqlite to use local file.
 var dbProvider = builder.Configuration["Database:Provider"] ?? "PostgreSQL";
-var pgConnection =
+var pgConnectionRaw =
     builder.Configuration["Database:ConnectionString"]
-    ?? Environment.GetEnvironmentVariable("RENTALX_LICENSE_DB");
+    ?? Environment.GetEnvironmentVariable("RENTALX_LICENSE_DB")
+    ?? Environment.GetEnvironmentVariable("DATABASE_URL");
 
 builder.Services.AddDbContext<LicenseDbContext>(options =>
 {
@@ -29,12 +31,15 @@ builder.Services.AddDbContext<LicenseDbContext>(options =>
         return;
     }
 
-    if (string.IsNullOrWhiteSpace(pgConnection))
+    if (string.IsNullOrWhiteSpace(pgConnectionRaw))
     {
         throw new InvalidOperationException(
-            "PostgreSQL connection string missing. Set Database:ConnectionString in appsettings.Development.json " +
-            "or environment variable RENTALX_LICENSE_DB.");
+            "PostgreSQL connection string missing. Set Database__ConnectionString on Railway " +
+            "(keyword Host=... form or postgresql:// URI), or RENTALX_LICENSE_DB / DATABASE_URL.");
     }
+
+    // Neon/Railway URI → Npgsql keyword string.
+    var pgConnection = PostgresConnectionString.Normalize(pgConnectionRaw);
 
     // Neon pooler endpoint — use for the running API.
     options.UseNpgsql(pgConnection, npgsql =>
