@@ -1,6 +1,10 @@
 <Project>
-  <!-- WPF markup compile races under parallel MSBuild (CS0103 InitializeComponent). -->
+  <!-- WPF: avoid parallel markup races (BG1002 missing .baml / InitializeComponent). -->
   <PropertyGroup>
     <BuildInParallel>false</BuildInParallel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UseWPF)' == 'true'">
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
 </Project>

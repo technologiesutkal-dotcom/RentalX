@@ -64,17 +64,8 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                     <Button Content="Save Settings" Style="{StaticResource PrimaryButtonStyle}"
-                            Command="{Binding SaveCommand}" Margin="0,0,10,0"/>
-                    <Button Content="Generate Marketing PDF" Style="{StaticResource QuickButtonStyle}"
-                            Command="{Binding GenerateMarketingPdfCommand}"
-                            ToolTip="Product guide tailored to your business type"
-                            Margin="0,0,10,0"/>
-                    <Button Content="Website Delivery Guide PDF" Style="{StaticResource QuickButtonStyle}"
-                            Command="{Binding GenerateDeliveryGuidePdfCommand}"
-                            ToolTip="End-to-end: website download, payment, setup, machine license"/>
+                            Command="{Binding SaveCommand}"/>
                 </StackPanel>
-                <TextBlock Text="Marketing PDF uses your business type and company details. Saved under Documents/RentalX/Marketing."
-                           Style="{StaticResource SecondaryTextStyle}" Margin="0,6,0,0" TextWrapping="Wrap"/>
                 <TextBlock Text="{Binding FormMessage}" Foreground="{Binding FormMessageBrush}"
                            FontWeight="SemiBold" Margin="0,12,0,0"/>
 

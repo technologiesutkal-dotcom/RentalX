@@ -1,6 +1,13 @@
-@RentalX.LicenseApi_HostAddress = http://localhost:5159
+@RentalX.LicenseApi_HostAddress = https://rentalx-production.up.railway.app
 
-GET {{RentalX.LicenseApi_HostAddress}}/weatherforecast/
+### Health
+GET {{RentalX.LicenseApi_HostAddress}}/
+Accept: application/json
+
+###
+
+### DB health
+GET {{RentalX.LicenseApi_HostAddress}}/api/health/db
 Accept: application/json
 
 ###

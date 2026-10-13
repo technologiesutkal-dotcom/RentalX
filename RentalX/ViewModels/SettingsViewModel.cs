@@ -13,18 +13,15 @@ namespace RentalX.ViewModels;
 public partial class SettingsViewModel : PageViewModelBase
 {
     private readonly ISettingsRepository _settings;
-    private readonly IMarketingPdfService _marketingPdf;
     private readonly IAuthService _auth;
     private readonly ISessionService _session;
 
     public SettingsViewModel(
         ISettingsRepository settings,
-        IMarketingPdfService marketingPdf,
         IAuthService auth,
         ISessionService session)
     {
         _settings = settings;
-        _marketingPdf = marketingPdf;
         _auth = auth;
         _session = session;
     }
@@ -192,50 +189,6 @@ public partial class SettingsViewModel : PageViewModelBase
         catch (Exception ex)
         {
             SetLoginError(ex.Message);
-        }
-    }
-
-    [RelayCommand]
-    private async Task GenerateMarketingPdfAsync()
-    {
-        try
-        {
-            var company = await _settings.GetAsync();
-            company.BusinessType = string.IsNullOrWhiteSpace(BusinessType) ? company.BusinessType : BusinessType.Trim();
-            company.CompanyName = string.IsNullOrWhiteSpace(CompanyName) ? company.CompanyName : CompanyName.Trim();
-            company.OwnerName = string.IsNullOrWhiteSpace(OwnerName) ? company.OwnerName : OwnerName.Trim();
-            company.Address = Address.Trim();
-            company.City = City.Trim();
-            company.Phone = string.IsNullOrWhiteSpace(Phone) ? company.Phone : Phone.Trim();
-            company.Email = Email.Trim();
-            company.ReportFooter = string.IsNullOrWhiteSpace(ReportFooter) ? company.ReportFooter : ReportFooter.Trim();
-
-            var path = _marketingPdf.Generate(company);
-            FormMessage = "Marketing PDF generated and opened.";
-            FormMessageBrush = new SolidColorBrush(Color.FromRgb(5, 150, 105));
-            MessageBox.Show($"Marketing guide saved:\n{path}", "RentalX Marketing PDF", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        catch (Exception ex)
-        {
-            FormMessage = ex.Message;
-            FormMessageBrush = new SolidColorBrush(Color.FromRgb(220, 38, 38));
-        }
-    }
-
-    [RelayCommand]
-    private void GenerateDeliveryGuidePdf()
-    {
-        try
-        {
-            var path = new ProductDeliveryGuidePdfService().Generate();
-            FormMessage = "Website delivery & license guide PDF generated.";
-            FormMessageBrush = new SolidColorBrush(Color.FromRgb(5, 150, 105));
-            MessageBox.Show($"Guide saved:\n{path}", "Delivery Guide PDF", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        catch (Exception ex)
-        {
-            FormMessage = ex.Message;
-            FormMessageBrush = new SolidColorBrush(Color.FromRgb(220, 38, 38));
         }
     }
 

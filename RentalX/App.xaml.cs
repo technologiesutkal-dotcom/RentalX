@@ -197,6 +197,36 @@ public partial class App : Application
             return;
         }
 
+        if (e.Args.Any(a => string.Equals(a, "--brochure-pdf", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                var settings = _services.GetRequiredService<ISettingsRepository>();
+                var company = settings.GetAsync().GetAwaiter().GetResult();
+                var path = new ProductInterfaceBrochurePdfService().Generate(company);
+                var marker = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "RentalX",
+                    "Brochure",
+                    "last-brochure.txt");
+                Directory.CreateDirectory(Path.GetDirectoryName(marker)!);
+                File.WriteAllText(marker, path);
+            }
+            catch (Exception ex)
+            {
+                var marker = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "RentalX",
+                    "Brochure",
+                    "last-brochure-error.txt");
+                Directory.CreateDirectory(Path.GetDirectoryName(marker)!);
+                File.WriteAllText(marker, ex.ToString());
+            }
+
+            Shutdown();
+            return;
+        }
+
         // License activation is handled by platform login + active subscription check on the API.
         var clientSession = _services.GetRequiredService<ISessionService>();
         clientSession.SignedOut += OnSignedOut;
