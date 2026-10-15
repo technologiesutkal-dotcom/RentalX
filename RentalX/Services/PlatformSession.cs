@@ -7,6 +7,7 @@ public sealed class PlatformSession : IPlatformSession
     public string? Token { get; private set; }
     public string? Role { get; private set; }
     public string? DisplayName { get; private set; }
+    public string? Username { get; private set; }
     public int? ClientId { get; private set; }
     public string? CompanyName { get; private set; }
 
@@ -16,13 +17,20 @@ public sealed class PlatformSession : IPlatformSession
     public bool IsClient =>
         string.Equals(Role, UserRoles.Client, StringComparison.OrdinalIgnoreCase);
 
-    public void Set(string token, string role, string displayName, int? clientId = null, string? companyName = null)
+    public void Set(
+        string token,
+        string role,
+        string displayName,
+        int? clientId = null,
+        string? companyName = null,
+        string? username = null)
     {
         Token = token;
         Role = role;
         DisplayName = displayName;
         ClientId = clientId;
         CompanyName = companyName;
+        Username = string.IsNullOrWhiteSpace(username) ? null : username.Trim();
     }
 
     public void Clear()
@@ -30,6 +38,7 @@ public sealed class PlatformSession : IPlatformSession
         Token = null;
         Role = null;
         DisplayName = null;
+        Username = null;
         ClientId = null;
         CompanyName = null;
     }

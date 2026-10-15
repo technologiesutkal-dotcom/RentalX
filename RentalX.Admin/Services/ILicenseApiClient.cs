@@ -16,6 +16,11 @@ public interface ILicenseApiClient
     Task<(ClientDto? Data, string? Error)> ReactivateClientAsync(int id, CancellationToken ct = default);
     Task<(string? Message, string? Error)> FactoryResetAsync(CancellationToken ct = default);
     Task<(string? Username, string? Error)> ChangeAdminCredentialsAsync(ChangeAdminCredentialsRequest request, CancellationToken ct = default);
+    /// <summary>Client password change using the client bearer token (Login ID stays the same).</summary>
+    Task<(string? Message, string? Error)> ChangeClientPasswordAsync(
+        ChangeClientPasswordRequest request,
+        string? bearerToken,
+        CancellationToken ct = default);
     Task<(List<AdminSerialDto>? Data, string? Error)> GetAdminSerialsAsync(CancellationToken ct = default);
     Task<(AdminSerialDto? Data, string? Error)> AddAdminSerialAsync(AdminSerialUpsertRequest request, CancellationToken ct = default);
     Task<(string? Message, string? Error)> RemoveAdminSerialAsync(int id, CancellationToken ct = default);

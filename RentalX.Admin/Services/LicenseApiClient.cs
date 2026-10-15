@@ -86,6 +86,21 @@ public sealed class LicenseApiClient : ILicenseApiClient
         return (data?.Username, error);
     }
 
+    public async Task<(string? Message, string? Error)> ChangeClientPasswordAsync(
+        ChangeClientPasswordRequest request,
+        string? bearerToken,
+        CancellationToken ct = default)
+    {
+        var (data, error) = await SendAsync<ChangeClientPasswordResponse>(
+            HttpMethod.Put,
+            "api/auth/password",
+            request,
+            auth: false,
+            ct,
+            bearerTokenOverride: bearerToken);
+        return (data?.Message, error);
+    }
+
     public Task<(List<AdminSerialDto>? Data, string? Error)> GetAdminSerialsAsync(CancellationToken ct = default) =>
         SendAsync<List<AdminSerialDto>>(HttpMethod.Get, "api/admin/serials", null, true, ct);
 
@@ -173,19 +188,21 @@ public sealed class LicenseApiClient : ILicenseApiClient
         string path,
         object? body,
         bool auth,
-        CancellationToken ct)
+        CancellationToken ct,
+        string? bearerTokenOverride = null)
     {
         try
         {
             using var request = new HttpRequestMessage(method, BuildUri(path));
-            if (auth)
+            var bearer = bearerTokenOverride ?? (auth ? _session.Token : null);
+            if (auth || !string.IsNullOrWhiteSpace(bearerTokenOverride))
             {
-                if (string.IsNullOrWhiteSpace(_session.Token))
+                if (string.IsNullOrWhiteSpace(bearer))
                 {
                     return (default, "Not signed in.");
                 }
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _session.Token);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearer);
             }
 
             if (body is not null)

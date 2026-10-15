@@ -230,11 +230,12 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            _platform.Set(data.Token, data.Role, data.DisplayName, data.ClientId, data.CompanyName);
+            var loginId = (data.Username ?? Username).Trim();
+            _platform.Set(data.Token, data.Role, data.DisplayName, data.ClientId, data.CompanyName, loginId);
 
             if (string.Equals(data.Role, UserRoles.SuperAdmin, StringComparison.OrdinalIgnoreCase))
             {
-                _adminSession.SetSession(data.Token, data.DisplayName, data.Role, data.Username ?? Username.Trim());
+                _adminSession.SetSession(data.Token, data.DisplayName, data.Role, loginId);
                 CompanyDisplay = "Super Admin";
             }
             else if (string.Equals(data.Role, UserRoles.Client, StringComparison.OrdinalIgnoreCase))
@@ -242,7 +243,7 @@ public partial class LoginViewModel : ObservableObject
                 _session.SignIn(new LoginAccount
                 {
                     Id = data.ClientId ?? 0,
-                    Username = Username.Trim(),
+                    Username = loginId,
                     DisplayName = data.DisplayName,
                     MustChangePassword = false
                 });

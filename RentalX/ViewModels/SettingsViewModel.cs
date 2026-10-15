@@ -2,6 +2,8 @@ using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RentalX.Admin.Models;
+using RentalX.Admin.Services;
 using RentalX.Data.Repositories;
 using RentalX.Helpers;
 using RentalX.Models;
@@ -13,17 +15,20 @@ namespace RentalX.ViewModels;
 public partial class SettingsViewModel : PageViewModelBase
 {
     private readonly ISettingsRepository _settings;
-    private readonly IAuthService _auth;
     private readonly ISessionService _session;
+    private readonly IPlatformSession _platform;
+    private readonly ILicenseApiClient _api;
 
     public SettingsViewModel(
         ISettingsRepository settings,
-        IAuthService auth,
-        ISessionService session)
+        ISessionService session,
+        IPlatformSession platform,
+        ILicenseApiClient api)
     {
         _settings = settings;
-        _auth = auth;
         _session = session;
+        _platform = platform;
+        _api = api;
     }
 
     public string[] BusinessTypes { get; } =
@@ -60,12 +65,12 @@ public partial class SettingsViewModel : PageViewModelBase
     [ObservableProperty] private string _emailError = string.Empty;
 
     [ObservableProperty] private string _currentLoginId = string.Empty;
-    [ObservableProperty] private string _loginId = string.Empty;
     [ObservableProperty] private string _currentPassword = string.Empty;
     [ObservableProperty] private string _newPassword = string.Empty;
     [ObservableProperty] private string _confirmPassword = string.Empty;
     [ObservableProperty] private string _loginMessage = string.Empty;
     [ObservableProperty] private Brush _loginMessageBrush = Brushes.Transparent;
+    [ObservableProperty] private bool _isChangingPassword;
 
     public override async Task LoadAsync()
     {
@@ -89,9 +94,11 @@ public partial class SettingsViewModel : PageViewModelBase
         EnableNotifications = s.EnableNotifications;
         AutoBackup = s.AutoBackup;
 
-        var account = await _auth.GetAccountAsync();
-        CurrentLoginId = account?.Username ?? _auth.DefaultUsername;
-        LoginId = CurrentLoginId;
+        // Always show the signed-in Login ID (platform username), never a local default like "admin".
+        CurrentLoginId =
+            _platform.Username
+            ?? _session.CurrentAccount?.Username
+            ?? string.Empty;
         CurrentPassword = NewPassword = ConfirmPassword = string.Empty;
         LoginMessage = string.Empty;
     }
@@ -143,15 +150,21 @@ public partial class SettingsViewModel : PageViewModelBase
     {
         LoginMessage = string.Empty;
 
-        if (string.IsNullOrWhiteSpace(CurrentPassword))
+        if (string.IsNullOrWhiteSpace(CurrentLoginId))
         {
-            SetLoginError("Enter your current password.");
+            SetLoginError("Login ID is missing. Sign out and sign in again.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(LoginId) || LoginId.Trim().Length < 3)
+        if (string.IsNullOrWhiteSpace(_platform.Token))
         {
-            SetLoginError("New login ID must be at least 3 characters.");
+            SetLoginError("Session expired. Sign out and sign in again, then change password.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(CurrentPassword))
+        {
+            SetLoginError("Enter your current password.");
             return;
         }
 
@@ -167,28 +180,39 @@ public partial class SettingsViewModel : PageViewModelBase
             return;
         }
 
+        IsChangingPassword = true;
         try
         {
-            await _auth.ChangeCredentialsAsync(CurrentPassword, LoginId.Trim(), NewPassword);
-            var updated = await _auth.GetAccountAsync();
-            if (updated is not null)
+            var (message, error) = await _api.ChangeClientPasswordAsync(
+                new ChangeClientPasswordRequest
+                {
+                    CurrentPassword = CurrentPassword,
+                    NewPassword = NewPassword
+                },
+                _platform.Token);
+
+            if (!string.IsNullOrWhiteSpace(error))
             {
-                _session.SignIn(updated);
+                SetLoginError(error);
+                return;
             }
 
-            CurrentLoginId = LoginId.Trim().ToLowerInvariant();
             CurrentPassword = NewPassword = ConfirmPassword = string.Empty;
-            LoginMessage = "Login ID and password updated successfully.";
+            LoginMessage = message ?? "Password updated. Your Login ID stays the same.";
             LoginMessageBrush = new SolidColorBrush(Color.FromRgb(5, 150, 105));
             MessageBox.Show(
-                "Login credentials updated.\nUse the new ID and password next time you sign in.",
-                "Login Updated",
+                $"Password updated successfully.\n\nLogin ID (unchanged): {CurrentLoginId}\nUse this Login ID with your new password next time.",
+                "Password Updated",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
             SetLoginError(ex.Message);
+        }
+        finally
+        {
+            IsChangingPassword = false;
         }
     }
 

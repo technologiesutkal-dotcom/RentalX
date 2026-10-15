@@ -37,6 +37,18 @@ public sealed class ChangeAdminCredentialsResponse
     public string? Message { get; set; }
 }
 
+public sealed class ChangeClientPasswordRequest
+{
+    public string CurrentPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+}
+
+public sealed class ChangeClientPasswordResponse
+{
+    public string? Username { get; set; }
+    public string? Message { get; set; }
+}
+
 public sealed class AdminSerialDto
 {
     public int Id { get; set; }

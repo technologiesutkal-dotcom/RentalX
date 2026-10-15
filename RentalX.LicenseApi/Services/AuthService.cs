@@ -21,6 +21,13 @@ public interface IAuthService
         string newUsername,
         string newPassword,
         CancellationToken ct = default);
+
+    /// <summary>Client password change. Login ID (username) stays the same.</summary>
+    Task<(string? Username, string? Error)> ChangeClientPasswordAsync(
+        string? token,
+        string currentPassword,
+        string newPassword,
+        CancellationToken ct = default);
 }
 
 public class AuthService(LicenseDbContext db) : IAuthService
@@ -351,6 +358,50 @@ public class AuthService(LicenseDbContext db) : IAuthService
         tracked.PasswordHash = hash;
         tracked.PasswordSalt = salt;
         tracked.DisplayName = string.IsNullOrWhiteSpace(tracked.DisplayName) ? "Super Admin" : tracked.DisplayName;
+        await db.SaveChangesAsync(ct);
+        return (tracked.Username, null);
+    }
+
+    public async Task<(string? Username, string? Error)> ChangeClientPasswordAsync(
+        string? token,
+        string currentPassword,
+        string newPassword,
+        CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return (null, "Unauthorized. Please sign in again.");
+        }
+
+        var now = DateTime.UtcNow;
+        var session = await db.ClientSessions
+            .Include(s => s.ClientUser)
+            .FirstOrDefaultAsync(s =>
+                s.Token == token &&
+                s.RevokedAt == null &&
+                s.ExpiresAt > now, ct);
+
+        var user = session?.ClientUser;
+        if (user is null || !user.IsActive)
+        {
+            return (null, "Unauthorized. Please sign in again.");
+        }
+
+        if (!PasswordHasher.Verify(currentPassword, user.PasswordHash, user.PasswordSalt))
+        {
+            return (null, "Current password is incorrect.");
+        }
+
+        if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Trim().Length < 6)
+        {
+            return (null, "New password must be at least 6 characters.");
+        }
+
+        var tracked = await db.ClientUsers.FirstAsync(u => u.Id == user.Id, ct);
+        var (hash, salt) = PasswordHasher.HashPassword(newPassword.Trim());
+        tracked.PasswordHash = hash;
+        tracked.PasswordSalt = salt;
+        // Username / Login ID never changes from the client Settings screen.
         await db.SaveChangesAsync(ct);
         return (tracked.Username, null);
     }

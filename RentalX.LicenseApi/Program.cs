@@ -221,6 +221,18 @@ app.MapPut("/api/admin/credentials", async (ChangeAdminCredentialsRequest reques
         : Results.Ok(new { username, message = "Super Admin username and password updated. Use them next time you sign in." });
 }).WithTags("Admin");
 
+// Client Settings: change password only (Login ID stays fixed).
+app.MapPut("/api/auth/password", async (ChangeClientPasswordRequest request, HttpRequest http, IAuthService auth) =>
+{
+    var (username, err) = await auth.ChangeClientPasswordAsync(
+        GetBearer(http),
+        request.CurrentPassword,
+        request.NewPassword);
+    return err is not null
+        ? Results.BadRequest(new { message = err })
+        : Results.Ok(new { username, message = "Password updated. Use your same Login ID with the new password next time you sign in." });
+}).WithTags("Auth");
+
 app.MapGet("/api/admin/serials", async (HttpRequest http, IAuthService auth, IAdminCatalogService catalog) =>
 {
     if (await auth.ValidateTokenAsync(GetBearer(http)) is null)

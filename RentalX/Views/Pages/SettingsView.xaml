@@ -72,28 +72,31 @@
                 <Border Background="#F8FAFC" CornerRadius="12" Padding="18" Margin="0,28,0,0"
                         BorderBrush="#E2E8F0" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Local app login (this PC)" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,6"/>
-                        <TextBlock Text="{Binding CurrentLoginId, StringFormat=Current login ID: {0}}"
-                                   Style="{StaticResource SecondaryTextStyle}" Margin="0,0,0,14"/>
+                        <TextBlock Text="Sign-in password" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,6"/>
+                        <TextBlock Text="Your Login ID is fixed. You can only change the password."
+                                   Style="{StaticResource SecondaryTextStyle}" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Login ID" Foreground="#64748B" Margin="0,0,0,6"/>
+                        <Border Background="#EEF2FF" BorderBrush="#C7D2FE" BorderThickness="1"
+                                CornerRadius="8" Padding="12,10" Margin="0,0,0,14">
+                            <TextBlock Text="{Binding CurrentLoginId}" FontWeight="SemiBold"
+                                       FontSize="15" Foreground="#0F766E"/>
+                        </Border>
 
                         <UniformGrid Columns="2">
                             <StackPanel Margin="0,0,12,12">
-                                <TextBlock Text="New Login ID *" Foreground="#64748B" Margin="0,0,0,6"/>
-                                <TextBox Text="{Binding LoginId, UpdateSourceTrigger=PropertyChanged}" Height="36" Padding="8,6"/>
-                            </StackPanel>
-                            <StackPanel Margin="12,0,0,12">
                                 <TextBlock Text="Current Password *" Foreground="#64748B" Margin="0,0,0,6"/>
                                 <PasswordBox Height="36" Padding="8,6"
                                              helpers:PasswordBoxHelper.BindPassword="True"
                                              helpers:PasswordBoxHelper.BoundPassword="{Binding CurrentPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
-                            <StackPanel Margin="0,0,12,12">
+                            <StackPanel Margin="12,0,0,12">
                                 <TextBlock Text="New Password *" Foreground="#64748B" Margin="0,0,0,6"/>
                                 <PasswordBox Height="36" Padding="8,6"
                                              helpers:PasswordBoxHelper.BindPassword="True"
                                              helpers:PasswordBoxHelper.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
-                            <StackPanel Margin="12,0,0,12">
+                            <StackPanel Margin="0,0,12,12">
                                 <TextBlock Text="Confirm New Password *" Foreground="#64748B" Margin="0,0,0,6"/>
                                 <PasswordBox Height="36" Padding="8,6"
                                              helpers:PasswordBoxHelper.BindPassword="True"
@@ -101,7 +104,7 @@
                             </StackPanel>
                         </UniformGrid>
 
-                        <Button Content="Update Login Credentials" Style="{StaticResource PrimaryButtonStyle}"
+                        <Button Content="Update Password" Style="{StaticResource PrimaryButtonStyle}"
                                 Command="{Binding ChangeLoginCommand}" HorizontalAlignment="Left"/>
                         <TextBlock Text="{Binding LoginMessage}" Foreground="{Binding LoginMessageBrush}"
                                    FontWeight="SemiBold" Margin="0,10,0,0" TextWrapping="Wrap"/>

@@ -27,6 +27,10 @@ public record ChangeAdminCredentialsRequest(
     [property: Required, MinLength(3)] string NewUsername,
     [property: Required, MinLength(6)] string NewPassword);
 
+public record ChangeClientPasswordRequest(
+    [property: Required, MinLength(6)] string CurrentPassword,
+    [property: Required, MinLength(6)] string NewPassword);
+
 public record AdminSerialDto(
     int Id,
     string SerialNumber,

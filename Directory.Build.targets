@@ -1,0 +1,3 @@
+<Project>
+  <!-- Intentionally minimal: WPF stability settings live in Directory.Build.props -->
+</Project>
